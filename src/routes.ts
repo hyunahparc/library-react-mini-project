@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { HomePage } from "./pages/Home/Home";
 import { SearchPage } from "./pages/Search/Search";
 import { NotFoundPage } from "./pages/NotFound/NotFound";
+import { BookDetailPage } from "./pages/BookDetail/BookDetail";
 import Layout from "./layout/Layout";
 
 
@@ -18,7 +19,11 @@ const routes = createBrowserRouter([
           path: "/search",
           Component: SearchPage,
         },
-                {
+        {
+          path: "/books/:bookId",
+          Component: BookDetailPage,
+        },
+        {
           path: "*",
           Component: NotFoundPage,
         },
