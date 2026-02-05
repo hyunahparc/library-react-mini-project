@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 
 // Function to fetch search results from Open Library API
@@ -20,7 +20,8 @@ const fetchSearchResults = async (
 
 // Search Page Component
 export const SearchPage = () => {
-
+    
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
     const [page, setPage] = useState(1);
@@ -49,7 +50,6 @@ export const SearchPage = () => {
     const pageWindow = 5;
     const startPage = Math.floor((page - 1) / pageWindow) * pageWindow + 1;
     const endPage = Math.min(startPage + pageWindow - 1, totalPages);
-
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-6">
@@ -81,13 +81,14 @@ export const SearchPage = () => {
                         hover:shadow-md
                         transition
                         "
+                        onClick={() => navigate(`/books/${book.key.replace("/works/", "")}`)}
                     >
                     <div className="w-38 h-65 mb-4 mx-auto flex items-center justify-center">
                         <img
                         src={
                             book.cover_i
                             ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-                            : "/no-cover.png"
+                            : "https://openlibrary.org/images/icons/avatar_book-sm.png"
                         }
                         alt={book.title}
                         className="w-full h-auto rounded"

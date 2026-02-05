@@ -59,7 +59,7 @@ const Header = () => {
   const handleSelect = (workKey: string) => {
     setSearch("");
     setOpen(false);
-    navigate(workKey); // "/works/OLxxxxW"
+    navigate(`/books/${workKey.replace("/works/", "")}`); // "/works/OLxxxxW"
   };
 
   // handle form submit
@@ -74,7 +74,7 @@ const Header = () => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="/">📚도서관</Navbar.Brand>
+        <Navbar.Brand href="/">📚 Library</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -83,7 +83,7 @@ const Header = () => {
             navbarScroll
           >
             <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
+            <Nav.Link href="#action2">Search</Nav.Link>
           </Nav>
           {/* search box */}
           <Form className="d-flex position-relative" onSubmit={handleSubmit} ref={searchRef}>
