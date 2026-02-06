@@ -83,7 +83,7 @@ const Header = () => {
             navbarScroll
           >
             <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Search</Nav.Link>
+            <Nav.Link href="/advanced-search">Search</Nav.Link>
           </Nav>
           {/* search box */}
           <Form className="d-flex position-relative" onSubmit={handleSubmit} ref={searchRef}>

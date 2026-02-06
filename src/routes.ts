@@ -4,6 +4,7 @@ import { SearchPage } from "./pages/Search/Search";
 import { NotFoundPage } from "./pages/NotFound/NotFound";
 import { BookDetailPage } from "./pages/BookDetail/BookDetail";
 import Layout from "./layout/Layout";
+import { AdvancedSearchPage } from "./pages/AdvancedSearch";
 
 
 const routes = createBrowserRouter([
@@ -18,6 +19,10 @@ const routes = createBrowserRouter([
         {
           path: "/search",
           Component: SearchPage,
+        },
+        {
+          path: "/advanced-search",
+          Component: AdvancedSearchPage,
         },
         {
           path: "/books/:bookId",
