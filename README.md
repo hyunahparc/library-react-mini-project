@@ -16,13 +16,13 @@ A **React** app for browsing books using **Open Library API**, with **React Quer
 ---
 
 ## 🔧 Features
-- Search books by title, author, year of publication or subject
-- Book detail pages with author, cover image, description, subjects
-- Wikipedia description integration for short open library API description
-- Pagination for search results
-- Carousels for books
-- Mock API support with MSW
-- E2E(End-to-End) tests using Playwright
+- **Search books** by title, author, year of publication or subject
+- **Book detail** pages with author, cover image, description, subjects
+- **Wikipedia description** integration for short open library API description
+- **Pagination** for search results
+- **Carousels** for books
+- **Mock API** support with MSW
+- **E2E(End-to-End) tests** using Playwright
 
 ---
 
