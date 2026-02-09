@@ -24,3 +24,16 @@ dist-ssr
 *.sw?
 
 .env
+
+# Playwright test reports
+playwright-report/
+
+# Test screenshots, videos, traces
+test-results/
+*.png
+*.webm
+*.zip
+*.trace
+
+# Playwright browser binaries
+node_modules/.cache/ms-playwright/
