@@ -67,14 +67,14 @@ const Header = () => {
       e.preventDefault();
       if (!debouncedSearch.trim()) return;
       setOpen(false);
-      navigate(`/search?title=${debouncedSearch}`);
+      navigate(`/search?q=${debouncedSearch}`);
   };
 
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
         <Container fluid>
-            <Navbar.Brand href="/">📚 Library</Navbar.Brand>
+            <Navbar.Brand href="/">📘Book Lovers' Library</Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll" />
             <Navbar.Collapse id="navbarScroll">
                 <Nav
@@ -82,8 +82,8 @@ const Header = () => {
                   style={{ maxHeight: '100px' }}
                   navbarScroll
                 >
-                    <Nav.Link href="#action1">Home</Nav.Link>
-                    <Nav.Link href="/advanced-search">Search</Nav.Link>
+                    <Nav.Link href="/">Home</Nav.Link>
+                    <Nav.Link href="/advanced-search">Advanced Search</Nav.Link>
                 </Nav>
                 {/* search box */}
                 <Form className="d-flex position-relative" onSubmit={handleSubmit} ref={searchRef}>
