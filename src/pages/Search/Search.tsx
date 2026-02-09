@@ -1,26 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState, type SyntheticEvent } from "react";
 
 // Function to fetch search results from Open Library API
 const fetchSearchResults = async (
-    params: Record<string, string>,
+    q: string,
     page: number,
     limit: number
 ) => {
-    const queryParams = new URLSearchParams();
-
-    Object.entries(params).forEach(([key, value]) => {
-        if (value.trim()) {
-        queryParams.append(key, value);
-        }
+    const params = new URLSearchParams({
+        q,
+        limit: limit.toString(),
+        offset: ((page - 1) * limit).toString(),
     });
 
-    queryParams.append("limit", limit.toString());
-    queryParams.append("offset", ((page - 1) * limit).toString());
-
     const response = await fetch(
-        `https://openlibrary.org/search.json?${queryParams.toString()}`
+        `https://openlibrary.org/search.json?${params.toString()}`
     );
 
     if (!response.ok) {
@@ -33,98 +27,38 @@ const fetchSearchResults = async (
 export const SearchPage = () => {
 
     const navigate = useNavigate();
-
     const [searchParams] = useSearchParams();
+
+    const q = searchParams.get("q") || "";
     // bring page number from url
     const page = Number(searchParams.get("page") || 1);
-    const [limit] = useState(18);
-
-    useEffect(() => {
-        const hasParams = Array.from(searchParams.keys()).length > 0;
-
-        if (hasParams) {
-            setSubmittedFilters({
-            title: searchParams.get("title") || "",
-            author: searchParams.get("author") || "",
-            first_publish_year: searchParams.get("first_publish_year") || "",
-            subject: searchParams.get("subject") || "",
-            });
-        } else {
-            setSubmittedFilters(null);
-    }
-    }, [searchParams]);
-
-    const [filters, setFilters] = useState({
-        title: searchParams.get("title") || "",
-        author: searchParams.get("author") || "",
-        first_publish_year: searchParams.get("first_publish_year") || "",
-        subject: searchParams.get("subject") || "",
-    });
-
-    const [submittedFilters, setSubmittedFilters] = useState<Record<string, string> | null>(null);
+    const limit = 18;
 
     const { data, isLoading, error } = useQuery({
-        queryKey: ['searchResults', submittedFilters, page],
-        queryFn: () => fetchSearchResults(submittedFilters!, page, limit),
-        enabled: !!submittedFilters, // Only run query when filters are submitted
+        queryKey: ['searchResults', q, page],
+        queryFn: () => fetchSearchResults(q, page, limit),
+        enabled: !!q, 
     });
 
     const books = data?.docs || [];
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFilters({ ...filters, [e.target.name]: e.target.value });
-    };
-
-    // push search button
-    const handleSubmit = (e: SyntheticEvent) => {
-        e.preventDefault();
-
-        const queryParams = new URLSearchParams();
-
-        Object.entries(filters).forEach(([key, value]) => {
-            if (value.trim()) {
-                queryParams.append(key, value);
-        }
-        });
-
-        queryParams.set("page", "1");
-
-        navigate(`/search?${queryParams.toString()}`);
-        setSubmittedFilters({...filters});
-    };
-
-    const goToPage = (nextPage: number) => {
-        const queryParams = new URLSearchParams(searchParams);
-        queryParams.set("page", nextPage.toString());
-
-        navigate(`/search?${queryParams.toString()}`);
-    };
-
     // pagination
     const total = data?.numFound || 0;
     const totalPages = Math.ceil(total / limit);
-
     const pageWindow = 5;
-    const startPage =
-    Math.floor((page - 1) / pageWindow) * pageWindow + 1;
+    const startPage = Math.floor((page - 1) / pageWindow) * pageWindow + 1;
     const endPage = Math.min(startPage + pageWindow - 1, totalPages);
-
+    
+    const goToPage = (p: number) => {
+        navigate(`/search?q=${encodeURIComponent(q)}&page=${p}`);
+    };
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-6">
         <h2 className="text-2xl font-semibold mb-2">
-            {/* 🔍 Search results for <span className="text-blue-600">"{title}"</span> */}
+            🔍 Search results for <span className="text-blue-600">"{q}"</span>
         </h2>
 
         <p className="text-gray-500">{total} results found</p>
-
-        {/* no result message */}
-        {!isLoading && total === 0 && (
-            <div className="mt-12 text-center text-black-500">
-            <p className="text-2xl font-medium">No result</p>
-            <p className="mt-2 text-sm">Please try again with other keywords!</p>
-            </div>
-        )}
 
         {/* card list */}
         <ul
