@@ -19,6 +19,20 @@ const fetchAuthor = async (authorId: string) => {
     return response.json();
 }
 
+const fetchWikipediaSummary = async (title: string) => {
+    const response = await fetch(
+        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
+        title
+        )}`
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch Wikipedia summary");
+    }
+
+    return response.json();
+};
+
 // Book Detail Page Component
 export const BookDetailPage = () => {
     const { bookId } = useParams<{ bookId: string }>();
@@ -38,14 +52,42 @@ export const BookDetailPage = () => {
         enabled: !!authorKey,
     });
 
-    if (isLoading) return <p>Loading book detail…</p>;
-    if (error) return <p>Error loading book detail</p>;
+    // Open Library description (string | { value })
+    const openLibraryDescription =
+        typeof bookData?.description === "string"
+        ? bookData.description
+        : bookData?.description?.value;
 
-    // Handle description which can be string or object
-    const description =
-    typeof bookData.description === "string"
-      ? bookData.description
-      : bookData.description?.value;
+    const shouldUseWikipedia =
+        !openLibraryDescription ||
+        openLibraryDescription.length < 200;
+
+    // Wikipedia query (fallback)
+    const { data: wikiData } = useQuery({
+        queryKey: ["wikiSummary", bookData?.title],
+        queryFn: () => fetchWikipediaSummary(bookData.title),
+        enabled: !!bookData?.title && shouldUseWikipedia,
+    });
+
+    if (isLoading) return <p>Loading book detail…</p>;
+    if (error) return (
+        <div className="flex flex-col items-center justify-center h-screen text-center">
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">Page Not Found</h2>
+            <p className="text-gray-600 mb-6">
+                Sorry, the book you are looking for does not exist.
+            </p>
+            <a
+                href="/"
+                className="px-4 py-2 transition"
+            >
+                Back to Home
+            </a>
+        </div>
+    );
+
+    const finalDescription = shouldUseWikipedia
+    ? wikiData?.extract
+    : openLibraryDescription;
 
     return (
         <div className="max-w-3xl mx-auto px-4 py-6">
@@ -67,10 +109,28 @@ export const BookDetailPage = () => {
                 className="w-50 max-w-50 mx-auto" />
             )}
             {/* description */}
-            {bookData.description && (
-                <p className="mt-4 text-gray-700 leading-relaxed">
-                    <ReactMarkdown>{description}</ReactMarkdown>
+            {finalDescription && (
+                <div className="mt-4 text-gray-700 leading-relaxed">
+                <ReactMarkdown>
+                    {finalDescription}
+                </ReactMarkdown>
+
+                <p className="mt-2 text-sm text-gray-400">
+                    Source:{" "}
+                    {shouldUseWikipedia ? "Wikipedia" : "Open Library"}
                 </p>
+
+                {shouldUseWikipedia && wikiData?.content_urls?.desktop?.page && (
+                    <a
+                    href={wikiData.content_urls.desktop.page}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-blue-600 hover:underline"
+                    >
+                    Read more on Wikipedia →
+                    </a>
+                )}
+                </div>
             )}
 
             {/* subjects */}
