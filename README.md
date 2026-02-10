@@ -1,11 +1,16 @@
-# 📚 Book Library React App
+# 📚 Book Library React App (Book Lovers' Library)
 
 
 A **React** app for browsing books using **Open Library API**, with **React Query** for data fetching, **mock API** support using **MSW**, and **Playwright** for end-to-end testing,
 
 ---
 
-## 🖱️ Tech stack
+## 🔗 Live Demo
+[**book-lovers-library.netlify.app**](https://book-lovers-library.netlify.app)
+
+---
+
+## 🖱️ Tech Stack
 - **Frontend:** React, TypeScript, Vite
 - **Data Fetching:** React Query
 - **Styling:** Tailwind CSS, React Bootstrap
