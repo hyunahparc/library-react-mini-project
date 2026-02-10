@@ -34,7 +34,7 @@ export const SearchPage = () => {
     const page = Number(searchParams.get("page") || 1);
     const limit = 18;
 
-    const { data, isLoading, error } = useQuery({
+    const { data } = useQuery({
         queryKey: ['searchResults', q, page],
         queryFn: () => fetchSearchResults(q, page, limit),
         enabled: !!q, 

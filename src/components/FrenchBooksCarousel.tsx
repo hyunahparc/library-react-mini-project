@@ -14,7 +14,7 @@ const fetchFrenchClassicBooks = async () => {
     fetch(
       `https://openlibrary.org/search.json?author=${encodeURIComponent(
         author
-      )}&limit=3`
+      )}&limit=2`
     ).then((res) => {
       if (!res.ok) throw new Error("Failed to fetch french classics");
       return res.json();

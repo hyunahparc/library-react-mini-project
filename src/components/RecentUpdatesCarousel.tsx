@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
 
 const fetchRecentChanges = async (limit: number) => {
   const res = await fetch(
