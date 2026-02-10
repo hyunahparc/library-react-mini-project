@@ -11,7 +11,7 @@ A **React** app for browsing books using **Open Library API**, with **React Quer
 - **Styling:** Tailwind CSS, React Bootstrap
 - **API Mocking:** MSW (Mock Service Worker)
 - **Routing:** React Router v6
-- **Testing:** Playwright (E2E)
+- **Testing:** Playwright
 
 ---
 
@@ -22,7 +22,7 @@ A **React** app for browsing books using **Open Library API**, with **React Quer
 - **Pagination** for search results
 - **Carousels** for books
 - **Mock API** support with MSW
-- **E2E(End-to-End) tests** using Playwright
+- **UI Tests** using Playwright
 
 ---
 
@@ -60,7 +60,7 @@ comment out worker.start() in src/mocks/browser.ts
 ---
 
 ## 👓 Testing
-Playwright End-to-End Tests
+Playwright UI Tests
 ```bash
 npx playwright test --ui
 ```
@@ -72,7 +72,7 @@ npx playwright test --ui
 ## ⌨️ Available Scripts
 ```bash
 npm run dev               # Start dev server
-npx playwright test --ui  # Run Playwright E2E tests
+npx playwright test --ui  # Run Playwright UI tests
 ```
 
 ---
